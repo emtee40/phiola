@@ -214,6 +214,48 @@ EOF
 	./phiola i /tmp/phiola-test.pls
 }
 
+test_list_heal() {
+	mkdir -p test test/listheal
+	echo '#EXTM3U
+#EXTINF:123,ARTIST - abs-rel
+/tmp/fmedia/fmedia-1/test/listheal/file.mp3
+#EXTINF:123,ARTIST - chg-ext
+listheal/file.mp3
+#EXTINF:123,ARTIST - chg-dir
+listheal/dir1/dir2/file-cd.mp3
+#EXTINF:123,ARTIST - chg-dir-ext
+listheal/dir1/dir2/file-cde.mp3
+#EXTINF:123,ARTIST - abs-out-of-scope
+/tmp/listheal/file-oos.mp3' >test/list.m3u
+	echo '#EXTM3U
+#EXTINF:123,ARTIST - abs-rel
+listheal/file.ogg
+#EXTINF:123,ARTIST - chg-ext
+listheal/file.ogg
+#EXTINF:123,ARTIST - chg-dir
+listheal/dir3/file-cd.mp3
+#EXTINF:123,ARTIST - chg-dir-ext
+listheal/dir3/file-cde.ogg
+#EXTINF:123,ARTIST - abs-out-of-scope
+/tmp/listheal/file-oos.mp3' >test/list2.m3u
+	touch test/listheal/file.ogg
+	mkdir -p test/listheal/dir3
+	touch test/listheal/dir3/file-cd.mp3
+	touch test/listheal/dir3/file-cde.ogg
+
+	./phiola list heal "test/list.m3u"
+	diff -Z test/list.m3u test/list2.m3u
+
+	echo '#EXTM3U
+#EXTINF:123,ARTIST - unchanged
+listheal/file.ogg' >test/list.m3u
+	echo '#EXTM3U
+#EXTINF:123,ARTIST - unchanged
+listheal/file.ogg' >test/list2.m3u
+	./phiola list heal "test/list.m3u"
+	diff -Z test/list.m3u test/list2.m3u
+}
+
 test_list_manual() {
 	echo "!!! PRESS Shift+L at the 3rd track !!!"
 	./phiola `pwd`/list*
@@ -318,6 +360,7 @@ TESTS=(
 	meta
 	dir_read
 	list
+	list_heal
 	# list_manual
 	cue
 	ofile_vars

@@ -108,8 +108,17 @@ static void exe_log(void *log_obj, uint flags, const char *module, phi_track *t,
 	va_end(va);
 }
 
+#define syserrlog(...) \
+	exe_log(&x->log, PHI_LOG_SYS | PHI_LOG_ERR, NULL, NULL, __VA_ARGS__)
+
 #define errlog(...) \
 	exe_log(&x->log, PHI_LOG_ERR, NULL, NULL, __VA_ARGS__)
+
+#define warnlog(...) \
+	exe_log(&x->log, PHI_LOG_WARN, NULL, NULL, __VA_ARGS__)
+
+#define infolog(...) \
+	exe_log(&x->log, PHI_LOG_INFO, NULL, NULL, __VA_ARGS__)
 
 #define dbglog(...) \
 do { \
