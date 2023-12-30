@@ -30,8 +30,8 @@ libphiola.$(SO): $(CORE_O)
 	$(LINK) -shared $+ $(LINKFLAGS) $(LINK_PTHREAD) $(LINK_DL) -o $@
 
 %.o: $(PHIOLA)/src/core/%.c
-	$(C) $(CFLAGS) $< -o $@
+	$(C) $(CFLAGS) $(CFLAGS_OPT) $< -o $@
 %.o: $(PHIOLA)/src/queue/%.c
-	$(C) $(CFLAGS) $< -o $@
+	$(C) $(CFLAGS) $(CFLAGS_OPT) $< -o $@
 %.o: $(PHIOLA)/src/jni/%.c
-	$(C) $(CFLAGS) $< -o $@
+	$(C) $(CFLAGS) $(CFLAGS_OPT) $< -o $@
